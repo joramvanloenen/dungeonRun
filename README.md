@@ -64,3 +64,16 @@ Push to the main branch. GitHub Actions runs the Pages deployment workflow. If t
 ## Data and privacy
 
 Your game world and records are stored **on your device**. They don't automatically sync between browsers or devices. Export your pack before clearing browser data.
+
+
+## Cryptwake — planned 3D successor
+
+**Design stage:** The current game above is still the existing **2D** version. Cryptwake is a proposed first-person 3D dungeon crawler with **grid-step exploration and free-movement combat**. The designs below describe architecture and a planned implementation; they do **not** imply these features are already playable.
+
+- [Game design and systems](docs/CRYPTWAKE_GAME_DESIGN.md) — movement, weapons, magic, rooms, secrets and the Bell.
+- [3D technical architecture](docs/CRYPTWAKE_TECHNICAL_ARCHITECTURE.md) — runtime, fog, collisions, assets and version-one migration.
+- [Integrated editor architecture](docs/CRYPTWAKE_EDITOR_ARCHITECTURE.md) — room, dungeon, texture, character, prop, weapon, VFX, encounter, logic and atmosphere tools.
+- [Delivery plan and acceptance criteria](docs/CRYPTWAKE_DELIVERY_PLAN.md) — build stages and definitions of done.
+- [Illustrative v2 world pack](docs/examples/cryptwake-world.v2.json) — three rooms and an optional concealed passage; **not importable into the current v1 game**.
+
+The existing dungeonRun world packs remain version 1 until the v2 implementation and migration are completed.
