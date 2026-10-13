@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1015">
+  <meta name="description" content="DUNGEON//RUN — a fast pixel-art dungeon crawler with a built-in world workshop.">
+  <title>DUNGEON//RUN — The Crypt Awaits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand" role="banner">
+        <div class="brand-mark" aria-hidden="true"><span>✦</span></div>
+        <div class="brand-name">DUNGEON<span class="slash">//</span>RUN</div>
+        <span class="brand-label">PIXEL ROGUELITE</span>
+      </div>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-btn selected" data-view="play"><span class="nav-ico">▶</span> PLAY</button>
+        <button class="nav-btn" data-view="workshop"><span class="nav-ico">▦</span> WORKSHOP</button>
+      </nav>
+      <div class="header-end"><span class="header-dot"></span><span>BUILD 0.1.0</span><button class="outline-btn help-btn" id="helpBtn">? <span>HOW TO PLAY</span></button></div>
+    </header>
+    <main>
+      <section id="playView" class="view active">
+        <div class="section-heading">
+          <div><div class="eyebrow"><span class="alive-dot"></span> THE DUNGEON IS OPEN</div><h1>One more <em>run.</em></h1><p>Move fast. Strike first. Survive the depths.</p></div>
+          <div class="heading-actions"><button class="secondary-btn" id="restartBtn">↻ NEW RUN</button><button class="secondary-btn" id="openWorkshopBtn">▦ EDIT WORLD <span>↗</span></button></div>
+        </div>
+        <div class="play-grid">
+          <section class="game-frame">
+            <div class="frame-header"><div class="frame-title"><span class="frame-lights"><i></i><i></i><i></i></span> LIVE FEED <span class="frame-sep">/</span> THE UNDERCRYPT</div><div class="frame-status"><span id="gameStateLabel">AWAITING PLAYER</span> <span class="status-indicator"></span></div></div>
+            <div class="game-stage">
+              <canvas id="gameCanvas" width="640" height="400" aria-label="Top-down dungeon crawler game" tabindex="0"></canvas>
+              <div id="startOverlay" class="game-overlay start-overlay">
+                <div class="overlay-topline">✧ &nbsp; AN ARCADE DUNGEON CRAWLER &nbsp; ✧</div>
+                <div class="overlay-emblem" aria-hidden="true">⚔</div>
+                <h2>ENTER THE<br><strong>UNDERCRYPT</strong></h2>
+                <p>Every room a challenge. Every second counts.</p>
+                <button class="primary-btn" id="startBtn">BEGIN THE RUN <span>→</span></button>
+                <small>WASD MOVE &nbsp; • &nbsp; MOUSE / SPACE ATTACK &nbsp; • &nbsp; SHIFT DASH</small>
+              </div>
+              <div id="pauseOverlay" class="game-overlay hidden"><div class="overlay-topline">THE CRYPT CAN WAIT</div><h2>PAUSED</h2><button class="primary-btn" id="resumeBtn">RESUME RUN →</button><button class="subtle-btn" id="pauseQuitBtn">END RUN</button></div>
+              <div id="endOverlay" class="game-overlay hidden"><div class="overlay-topline">THE UNDERCRYPT CLAIMS ANOTHER</div><h2>RUN <strong>OVER</strong></h2><p id="endSummary">The crypt remembers.</p><button class="primary-btn" id="againBtn">TRY AGAIN →</button></div>
+              <div class="touch-controls" id="touchControls">
+                <div id="joystick" class="joystick"><div class="stick"></div></div>
+                <div class="touch-actions"><button id="touchDash" class="touch-action dash" aria-label="Dash">↝</button><button id="touchAttack" class="touch-action attack" aria-label="Attack">⚔</button></div>
+              </div>
+              <div class="in-game-flash" id="gameToast"></div>
+            </div>
+            <div class="frame-footer"><div><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> MOVE <span class="footer-divider">/</span> <span class="key wide">SPACE</span> OR <span class="key">◉</span> ATTACK <span class="footer-divider">/</span> <span class="key wide">SHIFT</span> DASH</div><span id="gameFps">60 FPS</span></div>
+          </section>
+          <aside class="play-aside">
+            <div class="aside-block stats-block"><div class="aside-title"><span>01</span> ADVENTURER <span class="aside-symbol">✣</span></div>
+              <div class="hero-row"><div class="hero-portrait"><canvas id="heroPortrait" width="48" height="48"></canvas></div><div class="hero-id"><strong>THE WANDERER</strong><small>CLASS / BLADE DANCER</small><span class="hero-tag">LVL <b id="heroLevel">01</b></span></div></div>
+              <div class="stat-top"><span>VITALITY</span><span id="healthLabel">100 / 100</span></div><div class="meter"><div id="hpBar" class="meter-fill hp"></div></div>
+              <div class="stat-top"><span>DASH ENERGY</span><span id="dashLabel">READY</span></div><div class="meter"><div id="dashBar" class="meter-fill dash"></div></div>
+            </div>
+            <div class="aside-block"><div class="aside-title"><span>02</span> CURRENT RUN <span class="aside-symbol">⌁</span></div>
+              <div class="run-stat"><span>DEPTH</span><strong id="depthStat">01 <small>/ ∞</small></strong></div><div class="run-stat"><span>ENEMIES SLAIN</span><strong id="killStat">000</strong></div><div class="run-stat"><span>SOULS COLLECTED</span><strong id="scoreStat">0000</strong></div><div class="run-stat"><span>COMBO</span><strong id="comboStat" class="orange">×1</strong></div>
+            </div>
+            <div class="aside-block small-bottom"><div class="aside-title"><span>03</span> RECORDS <span class="aside-symbol">◇</span></div><div class="record-line"><span>BEST DEPTH</span><strong id="bestDepth">—</strong></div><div class="record-line"><span>HIGH SCORE</span><strong id="bestScore">—</strong></div></div>
+            <div class="tip-card"><div>✳ &nbsp; DESIGN YOUR OWN DUNGEON</div><p>Every room, enemy and prop can be customized in the Workshop.</p><button id="asideWorkshopBtn">OPEN WORKSHOP →</button></div>
+          </aside>
+        </div>
+        <div class="play-bottom"><span>✦ HANDCRAFTED CHAOS, ONE ROOM AT A TIME.</span><span>DEATH IS TEMPORARY. PIXELS ARE FOREVER.</span></div>
+      </section>
+      <section id="workshopView" class="view">
+        <div class="section-heading workshop-heading"><div><div class="eyebrow"><span class="alive-dot"></span> YOUR WORLD, YOUR RULES</div><h1>The <em>workshop.</em></h1><p>Paint the pixels. Build the rooms. Unleash your monsters.</p></div><div class="heading-actions"><button class="secondary-btn" id="exportBtn">↓ EXPORT PACK</button><button class="secondary-btn" id="importBtn">↑ IMPORT PACK</button><input type="file" accept="application/json,.json" id="importInput" hidden><button class="primary-btn sm" id="playCustomBtn">▶ PLAY YOUR WORLD</button></div></div>
+        <div class="workshop-panel">
+          <div class="workshop-tabs" role="tablist" aria-label="Editor type"><button class="workshop-tab active" data-mode="room">▦ <span>ROOM EDITOR</span></button><button class="workshop-tab" data-mode="texture">▥ <span>TEXTURE LAB</span></button><button class="workshop-tab" data-mode="enemy">♟ <span>ENEMY FORGE</span></button><button class="workshop-tab" data-mode="prop">✤ <span>PROP STUDIO</span></button><div class="workshop-tabs-end">AUTO-SAVED LOCALLY <span class="saved-dot"></span></div></div>
+          <div class="editor-grid">
+            <aside class="asset-panel">
+              <div class="pane-title"><span id="assetTitle">ROOMS</span><span id="assetCount">00 ASSETS</span></div>
+              <div class="asset-list" id="assetList"></div>
+              <div class="asset-buttons"><button id="newAssetBtn" class="primary-btn sm full">+ CREATE NEW</button><button id="duplicateAssetBtn" class="secondary-btn full">⧉ DUPLICATE</button></div>
+            </aside>
+            <section class="editor-center">
+              <div class="editor-toolbar"><div class="editor-context"><span class="context-tag" id="editorContextTag">ROOM / 01</span><strong id="editorTitle">THE ENTRANCE</strong></div><div class="editor-mini-actions"><button id="undoBtn" title="Undo (Ctrl+Z)">↶</button><button id="redoBtn" title="Redo (Ctrl+Y)">↷</button><button id="gridBtn" class="active-tool" title="Toggle grid">▦</button></div></div>
+              <div class="editor-artboard" id="editorArtboard"><canvas id="editorCanvas" width="560" height="340" aria-label="Pixel and room editing canvas"></canvas></div>
+              <div class="editor-footer"><span id="editorHint">CLICK OR DRAG TO PAINT TILES</span><span id="editorCoord">X: -- Y: --</span></div>
+              <div class="palette-section" id="paletteSection"><div class="pane-title">COLOR PALETTE <span id="paletteNote">PICK A COLOR TO PAINT</span></div><div class="palette-row" id="paletteRow"></div><div class="custom-color"><label for="customColor">CUSTOM COLOR</label><input type="color" id="customColor" value="#f5a45d"><button id="eyedropperBtn" title="Pick pixel color">⌾ PICK COLOR</button></div></div>
+            </section>
+            <aside class="inspector-panel">
+              <div class="pane-title">INSPECTOR <span>✳</span></div>
+              <label class="field-label" for="assetNameInput">ASSET NAME</label><input class="text-field" id="assetNameInput" maxlength="32" placeholder="Untitled">
+              <div id="modeControls"></div>
+              <div class="inspector-bottom"><button class="secondary-btn danger full" id="deleteAssetBtn">⌫ DELETE ASSET</button><button class="secondary-btn full" id="resetPackBtn">↻ RESTORE DEFAULTS</button></div>
+            </aside>
+          </div>
+        </div>
+        <div class="workshop-bottom"><span>✷ PAINT WITH DRAG • RIGHT CLICK ERASES • FILES LIVE IN YOUR BROWSER</span><span>EXPORT TO SHARE YOUR WORLD WITH OTHERS</span></div>
+      </section>
+    </main>
+    <footer class="site-footer"><span>© DUNGEON//RUN <span class="dim">/ AN EXPERIMENT IN FAST LITTLE ADVENTURES</span></span><span>CRAFTED IN PIXELS <span class="heart">♥</span></span></footer>
+  </div>
+  <dialog id="helpDialog" class="help-dialog"><form method="dialog"><button class="dialog-close" aria-label="Close">✕</button><div class="eyebrow">SURVIVAL MANUAL</div><h2>THE BASICS</h2><p>Clear each room to unlock the glowing exit. Move into the exit to descend deeper. Every fifth floor brings harder enemies.</p><div class="help-grid"><div><b>W A S D / ARROWS</b><span>Move</span></div><div><b>MOUSE / SPACE</b><span>Attack, hold for rapid strikes</span></div><div><b>SHIFT</b><span>Dash through danger</span></div><div><b>ESC</b><span>Pause</span></div></div><p>The Workshop edits live assets. Rooms define tiles, spawn points, exits, enemies and props. Textures, enemies and props are all editable pixel-by-pixel. Your changes save automatically to this browser; export a pack to share or back it up.</p><button class="primary-btn sm">GOT IT →</button></form></dialog>
+  <div id="notification" role="status" aria-live="polite"></div>
+  <script src="data.js"></script><script src="game.js"></script><script src="editor.js"></script>
+</body>
+</html>
