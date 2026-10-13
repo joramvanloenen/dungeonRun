@@ -83,7 +83,7 @@ class Game {
  enterRoom(depth){
   this.depth=depth;
   const list=D.assets.room;
-  const template=list[(depth-1)%list.length];this.room=D.clone(template);this.room.tiles=this.room.tiles.map(id=>D.find('texture',id)?id:'floor');
+  const template=(depth===1&&this.previewRoomId?list.find(r=>r.id===this.previewRoomId):null)||list[(depth-1)%list.length];this.room=D.clone(template);this.room.tiles=this.room.tiles.map(id=>D.find('texture',id)?id:'floor');
   // The current room's authored enemies are the core population; higher depths add a little danger.
   const extra=Math.min(7,Math.floor((depth-1)/2));
   this.props=(this.room.props||[]).filter(p=>D.find('prop',p.kind)).map(p=>({...p,x:p.x+.5,y:p.y+.5,hp:D.find('prop',p.kind).hp||1,flash:0,alive:true}));
@@ -143,10 +143,7 @@ class Game {
    if(t.hp<=0)kill(t);
    else if(t.kind&&this.isClear(t.x+push.x*.28,t.y+push.y*.28,.32)){t.x+=push.x*.28;t.y+=push.y*.28;}
   };
-  for(const e of this.enemies)if(e.hp>0)hitEnemy(e);
-  function hitEnemy(e){targetHit(e,25+p.level*4,()=>this.killEnemy(e),1.8);}
-  // Bound callback for the local enemy iteration above.
-  // (The actual iteration is performed below with an arrow to preserve this.)
+  for(const e of this.enemies)if(e.hp>0)targetHit(e,25+p.level*4,()=>this.killEnemy(e),1.8);
   for(const obj of this.props){if(obj.alive&&D.find('prop',obj.kind)?.breakable)targetHit(obj,27,()=>this.breakProp(obj),1.65);}
   if(hits){this.shake=Math.max(this.shake,4);this.flash=.045;this.sound('hit');}else this.sound('swing');
  }
