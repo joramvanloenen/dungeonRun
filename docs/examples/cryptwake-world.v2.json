@@ -86,11 +86,24 @@
         "health": 40,
         "poise": 24,
         "movementSpeed": 2.8,
-        "aiId": "ai-melee-sentry",
-        "attackIds": [
-          "attack-sentry"
-        ],
-        "lootTableId": null
+        "lootTableId": null,
+        "ai": {
+          "archetype": "chase-melee",
+          "visionRange": 7,
+          "hearingRange": 9,
+          "canFollowThroughDoors": true
+        },
+        "attacks": [
+          {
+            "id": "attack-sentry",
+            "name": "Clumsy Slash",
+            "damage": 9,
+            "windupMs": 470,
+            "activeMs": 140,
+            "recoveryMs": 630,
+            "reach": 1.25
+          }
+        ]
       }
     },
     "props": {
@@ -250,21 +263,6 @@
           }
         ],
         "placements": [
-          {
-            "id": "inst-guard",
-            "assetType": "character",
-            "assetId": "enemy-bone-sentry",
-            "cell": [
-              2,
-              2
-            ],
-            "positionOffset": [
-              0,
-              0,
-              0
-            ],
-            "yawDegrees": 225
-          },
           {
             "id": "inst-crack",
             "assetType": "prop",
